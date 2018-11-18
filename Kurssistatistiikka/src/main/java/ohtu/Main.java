@@ -4,10 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import java.io.IOException;
 import org.apache.http.client.fluent.Request;
-import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import java.util.Set;
 
 public class Main {
 
@@ -26,9 +25,8 @@ public class Main {
         String courseBodyText = Request.Get(courseUrl).execute().returnContent().asString();
 
 //        System.out.println("json-muotoinen data:");
-  //      System.out.println(subBodytext);
-    //    System.out.println(courseBodyText);
-
+        //      System.out.println(subBodytext);
+        //    System.out.println(courseBodyText);
         Gson mapper = new Gson();
         Submission[] subs = mapper.fromJson(subBodytext, Submission[].class);
         Course[] courses = mapper.fromJson(courseBodyText, Course[].class);
@@ -57,9 +55,21 @@ public class Main {
                 System.out.println("\nyhteensä: " + te + "/" + course.countExercises() + " tehtävää ja " + tu
                         + " tuntia\n");
                 try {
-                    String statsResponse = "https://studies.cs.helsinki.fi/courses/" + course.getName() + "/stats";
+                    String statsResponse = Request.Get("https://studies.cs.helsinki.fi/courses/" + course.getName() + "/stats").execute().returnContent().asString();;
                     JsonParser parser = new JsonParser();
-    //                JsonObject parsittuData = parser.parse(statsResponse).getAsJsonObject();
+                    JsonObject parsittuData = parser.parse(statsResponse).getAsJsonObject();
+                    int hour = 0;
+                    int exercise = 0;
+                    int student = 0;
+                    for (String i : parsittuData.keySet()) {
+                        JsonObject jsonData = parsittuData.getAsJsonObject(i);
+                        hour += jsonData.get("hour_total").getAsInt();
+                        exercise += jsonData.get("exercise_total").getAsInt();
+                        student += jsonData.get("students").getAsInt();
+                    }
+
+                    System.out.println("kurssilla yhteensä " + student + " palautusta, "
+                            + "palautettuja tehtäviä " + exercise + " kpl, aikaa käytetty yhteensä " + hour + " tuntia");
 
                 } catch (JsonSyntaxException e) {
                     System.out.println("napattu\n");
@@ -71,6 +81,8 @@ public class Main {
     }
 }
 /*
+
+kurssilla yhteensä 425 palautusta, palautettuja tehtäviä 5186 kpl, aikaa käytetty yhteensä 3436 tuntia
 opiskelijanumero 012345678
 
 Web-palvelinohjelmointi Ruby on Rails syksy 2018
