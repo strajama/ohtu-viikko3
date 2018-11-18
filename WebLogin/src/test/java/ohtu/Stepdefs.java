@@ -28,6 +28,20 @@ public class Stepdefs {
         WebElement element = driver.findElement(By.linkText("register new user"));
         element.click();
     }
+    
+    @Given("^user with username \"([^\"]*)\" with password \"([^\"]*)\" is successfully created$")
+    public void user_with_username_with_password_is_successfully_created (String username, String password) throws Throwable {
+        new_selected();
+        newUser(username, password, password);
+        new_user_is_created();
+    }
+    
+    @Given("^user with username \"([^\"]*)\" and password \"([^\"]*)\" is tried to be created$")
+    public void user_with_username_and_password_is_tried_to_be_created (String username, String password) throws Throwable {
+        new_selected();
+        newUser(username, password, password);
+        new_user_is_not_created("error");
+    }
 
     @When("^username \"([^\"]*)\" and password \"([^\"]*)\" are given$")
     public void username_and_password_are_given(String username, String password) throws Throwable {
@@ -63,18 +77,30 @@ public class Stepdefs {
     public void a_valid_username_and_password_and_matching_password_confirmation_are_entered(String username, String password, String confirmation) throws Throwable {
         newUser(username, password, confirmation);
     }
+
     @When("^a invalid username \"([^\"]*)\" and password \"([^\"]*)\" and matching password confirmation \"([^\"]*)\" are entered$")
-    public void a_invalid_username_and_password_and_matching_password_confirmation_are_entered (String username, String password, String confirmation) throws Throwable {
+    public void a_invalid_username_and_password_and_matching_password_confirmation_are_entered(String username, String password, String confirmation) throws Throwable {
         newUser(username, password, confirmation);
     }
-    
+
     @When("^a valid username \"([^\"]*)\" and too short password \"([^\"]*)\" and matching password confirmation \"([^\"]*)\" are entered$")
     public void valid_username_and_password_and_too_short_matching_password_confirmation_are_entered(String username, String password, String confirmation) throws Throwable {
         newUser(username, password, confirmation);
     }
+
     @When("^a valid username \"([^\"]*)\" and password \"([^\"]*)\" and unmatching password confirmation \"([^\"]*)\" are entered$")
-        public void valid_username_and_password_and_unmatching_password_confirmation_are_entered(String username, String password, String confirmation) throws Throwable {
+    public void valid_username_and_password_and_unmatching_password_confirmation_are_entered(String username, String password, String confirmation) throws Throwable {
         newUser(username, password, confirmation);
+    }
+
+    @When("^previously registered username \"([^\"]*)\" and password \"([^\"]*)\" are given$")
+    public void previously_registered_username_and_password_are_given(String username, String password) throws Throwable {
+        logInWith(username, password);
+    }
+    
+    @When("^previously attempted username \"([^\"]*)\" and password \"([^\"]*)\" are given$")
+    public void previously_attempted_username_and_password_are_given(String username, String password) throws Throwable {
+        logInWith(username,password);
     }
 
     @Then("^user is logged in$")
@@ -87,14 +113,14 @@ public class Stepdefs {
         pageHasContent("invalid username or password");
         pageHasContent("Give your credentials to login");
     }
-    
+
     @Then("^a new user is created$")
     public void new_user_is_created() throws Throwable {
         pageHasContent("Welcome to Ohtu Application!");
     }
-    
-    @Then("^user is not created and error \"([^\"]*)\" is reported$") 
-        public void new_user_is_not_created(String error) throws Throwable {
+
+    @Then("^user is not created and error \"([^\"]*)\" is reported$")
+    public void new_user_is_not_created(String error) throws Throwable {
         pageHasContent(error);
     }
 
