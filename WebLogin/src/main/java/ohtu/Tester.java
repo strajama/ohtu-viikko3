@@ -3,10 +3,27 @@ package ohtu;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 public class Tester {
+        public static void main(String[] args) {
+        WebDriver driver = new HtmlUnitDriver();
+        driver.get("http://localhost:4567");
+        
+        // tulostetaan sivu konsoliin
+        System.out.println(driver.getPageSource());
+        
+        WebElement element = driver.findElement(By.linkText("login"));
+        element.click();
 
+        // tulostetaan sivu konsoliin
+        System.out.println(driver.getPageSource());
+        
+        // ...
+
+        driver.quit();
+    }
+/*
     public static void main(String[] args) {
         WebDriver driver = new ChromeDriver();
 
@@ -31,7 +48,7 @@ public class Tester {
         sleep(3);
         
         driver.quit();
-    }
+    }*/
     
     private static void sleep(int n){
         try{

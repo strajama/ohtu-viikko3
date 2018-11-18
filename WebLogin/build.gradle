@@ -42,3 +42,7 @@ test {
 // Define the main class for the application
 mainClassName = 'ohtu.Main'
 
+dependencies {
+    // ...
+    compile group: 'org.seleniumhq.selenium', name: 'selenium-htmlunit-driver',version: seleniumVersion  
+}

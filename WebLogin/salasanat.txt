@@ -1,2 +1,5 @@
 pekka;akkep
 jukka;akkuj
+uusi;salasana1
+maija;majava22
+kakkiainen;salasana1
